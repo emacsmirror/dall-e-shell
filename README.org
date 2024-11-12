@@ -1,3 +1,7 @@
+* dall-e-shell
+
+An Emacs shell for OpenAI's DALL-E
+
 * Install
 
 #+begin_src emacs-lisp :lexical no
