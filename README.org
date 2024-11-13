@@ -2,8 +2,23 @@
 
 An Emacs shell for OpenAI's DALL-E
 
+** Support this effort
+
+If you're finding =dall-e-shell= useful, help make the project sustainable and consider ✨[[https://github.com/sponsors/xenodium][sponsoring]]✨.
+
+=dall-e-shell= is in development. Please report issues or send [[https://github.com/xenodium/dall-e-shell/pulls][pull requests]] for improvements.
+
+** Like this package? Tell me about it 💙
+
+Finding it useful? Like the package? I'd love to hear from you. Get in touch ([[https://indieweb.social/@xenodium][Mastodon]] / [[https://twitter.com/xenodium][Twitter]] / [[https://www.reddit.com/user/xenodium][Reddit]] / [[mailto:me__AT__xenodium.com][Email]]).
+
 * Install
 
+- Load =(require 'dall-e-shell)=
+
+** MELPA
+
+If using [[https://github.com/jwiegley/use-package][use-package]], you can install with =:ensure t=.
 #+begin_src emacs-lisp :lexical no
   (use-package dall-e-shell
     :ensure t
@@ -12,7 +27,41 @@ An Emacs shell for OpenAI's DALL-E
       (lambda ()
         (auth-source-pass-get 'secret "openai-key")))))
 #+end_src
+* Set OpenAI key
 
+You'll first need to get a [[https://platform.openai.com/account/api-keys][key from OpenAI]].
+
+** As function
+#+begin_src emacs-lisp
+  ;; if you are using the "pass" password manager
+  (setq dall-e-shell-openai-key
+        (lambda ()
+          ;; (auth-source-pass-get 'secret "openai-key") ; alternative using pass support in auth-sources
+          (nth 0 (process-lines "pass" "show" "openai-key"))))
+
+  ;; or if using auth-sources, e.g., so the file ~/.authinfo has this line:
+  ;;  machine api.openai.com password OPENAI_KEY
+  (setq dall-e-shell-openai-key
+        (auth-source-pick-first-password :host "api.openai.com"))
+
+  ;; or same as previous but lazy loaded (prevents unexpected passphrase prompt)
+  (setq dall-e-shell-openai-key
+        (lambda ()
+          (auth-source-pick-first-password :host "api.openai.com")))
+#+end_src
+
+** Manually
+=M-x set-variable dall-e-shell-openai-key=
+
+** As variable
+#+begin_src emacs-lisp
+  (setq dall-e-shell-openai-key "my key")
+#+end_src
+
+** As an ENV variable
+#+begin_src emacs-lisp
+(setq dall-e-shell-openai-key (getenv "OPENAI_API_KEY"))
+#+end_src
 * Launch
 
 Launch with =M-x dall-e-shell=.
