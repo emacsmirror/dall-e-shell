@@ -240,9 +240,8 @@ Set RENAME-BUFFER to also rename the buffer accordingly."
       (if (equal (dall-e-shell-model-version) "dall-e-3")
           (push `(quality . ,dall-e-shell-image-quality) request-data)
         (user-error "`dall-e-shell-image-quality' must be used with \"dall-e-3\"")))
-    (when dall-e-shell-model-version
-      (push `(model . ,dall-e-shell-model-version)
-            request-data))
+    (push `(model . ,(dall-e-shell-model-version))
+          request-data)
     request-data))
 
 (defun dall-e-shell-interrupt (ignore-item)
