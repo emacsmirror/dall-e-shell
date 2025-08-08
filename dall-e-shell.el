@@ -5,7 +5,7 @@
 ;; Author: Alvaro Ramirez https://xenodium.com
 ;; URL: https://github.com/xenodium/chatgpt-shell
 ;; Version: 0.43.2
-;; Package-Requires: ((emacs "27.1") (shell-maker "0.67.1"))
+;; Package-Requires: ((emacs "27.1") (shell-maker "0.79.1"))
 
 ;; This package is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -262,11 +262,11 @@ With prefix IGNORE-ITEM, do not mark as failed."
   (make-directory dall-e-shell-image-output-directory t)
   dall-e-shell-image-output-directory)
 
-(defun dall-e-shell--extract-response (raw-response &optional no-download)
-  "Extract DALL-E response from RAW-RESPONSE.
+(defun dall-e-shell--extract-response (object &optional no-download)
+  "Extract DALL-E response from OBJECT.
 Set NO-DOWNLOAD to skip automatic downloading."
   (if-let* ((buffer (shell-maker-buffer shell-maker--config))
-            (whole (shell-maker--json-parse-string raw-response))
+            (whole (shell-maker--json-parse-string (map-elt object :pending)))
             (url (let-alist whole
                    (let-alist (seq-first .data)
                      .url)))
@@ -288,8 +288,7 @@ Set NO-DOWNLOAD to skip automatic downloading."
             (propertize path 'display "[downloading...]")
           (concat (propertize path 'display "[downloading...]")
                   (format "\n\n%s" revised-prompt))))
-    (list (cons :filtered nil)
-          (cons :pending raw-response))))
+    object))
 
 (defun dall-e-shell-start-download (shell-buffer url path revised-prompt)
   "Start downloading image from URL into PATH and modify SHELL-BUFFER."
