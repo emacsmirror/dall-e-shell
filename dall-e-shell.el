@@ -162,7 +162,11 @@ With NEW-SESSION, start a new session."
         ;; TODO: Add menus. See `chatgpt-shell--add-menus'.
         (dall-e-shell--update-prompt t))
     (define-key dall-e-shell-mode-map (kbd "C-c C-v")
-                #'dall-e-shell-swap-model-version)))
+                #'dall-e-shell-swap-model-version)
+    (define-key dall-e-shell-mode-map (kbd "C-c C-c")
+                #'dall-e-shell-interrupt)
+    (define-key dall-e-shell-mode-map (kbd "RET")
+                #'shell-maker-submit)))
 
 (defun dall-e-shell--update-prompt (rename-buffer)
   "Update prompt and prompt regexp from `dall-e-shell-model-versions'.
