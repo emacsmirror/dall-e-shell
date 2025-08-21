@@ -1,5 +1,7 @@
 * dall-e-shell
 
+#+HTML: <img src="https://raw.githubusercontent.com/xenodium/dall-e-shell/main/screenshot.png" style="max-width:80%;" />
+
 An Emacs shell for OpenAI's DALL-E
 
 For related packages, see:
