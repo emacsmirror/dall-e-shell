@@ -136,9 +136,6 @@ or
       :filter #'dall-e-shell--extract-response
       :shell shell))))
 
-(defvar dall-e-shell-mode-map (make-sparse-keymap)
-  "Keymap for `dall-e-shell-mode'.")
-
 ;;;###autoload
 (defun dall-e-shell (&optional new-session)
   "Start a DALL-E shell.
@@ -157,16 +154,14 @@ With NEW-SESSION, start a new session."
                        dall-e-shell-welcome-function
                        new-session
                        (when (dall-e-shell--shell-buffers)
-                         (buffer-name (seq-first (dall-e-shell--shell-buffers)))))
-    (with-current-buffer
-        ;; TODO: Add menus. See `chatgpt-shell--add-menus'.
-        (dall-e-shell--update-prompt t))
-    (define-key dall-e-shell-mode-map (kbd "C-c C-v")
-                #'dall-e-shell-swap-model-version)
-    (define-key dall-e-shell-mode-map (kbd "C-c C-c")
-                #'dall-e-shell-interrupt)
-    (define-key dall-e-shell-mode-map (kbd "RET")
-                #'shell-maker-submit)))
+                         (buffer-name (seq-first (dall-e-shell--shell-buffers)))))))
+
+(defvar-keymap dall-e-shell-mode-map
+  :parent shell-maker-mode-map
+  :doc "Keymap for `dall-e-shell-mode'."
+  "C-c C-v" #'dall-e-shell-swap-model-version)
+
+(shell-maker-define-major-mode dall-e-shell--config dall-e-shell-mode-map)
 
 (defun dall-e-shell--update-prompt (rename-buffer)
   "Update prompt and prompt regexp from `dall-e-shell-model-versions'.
